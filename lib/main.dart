@@ -1,9 +1,7 @@
-import 'package:bloc_lesson/count/count_bloc_cubit.dart';
 import 'package:bloc_lesson/validate/validate_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'count/count_page.dart';
 import 'validate/validate_page.dart';
 
 void main() {
@@ -17,11 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: "Flutter bloc",),
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: BlocProvider(
+          create: (context) => ValidateCubit(),
+          child: const ValidatePage(),
+        )
     );
   }
 }

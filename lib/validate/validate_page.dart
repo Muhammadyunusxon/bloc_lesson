@@ -30,14 +30,12 @@ class _ValidatePageState extends State<ValidatePage> {
       appBar: AppBar(
         title: const Text("Validate Page"),
       ),
-      body: BlocListener<ValidateCubit, ValidateState>(
-        listener: (context, state) async {
-
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: TextFormField(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
               controller: _controller,
               decoration: const InputDecoration(
                 label: Text("Username"),
@@ -51,12 +49,38 @@ class _ValidatePageState extends State<ValidatePage> {
                 ),
               ),
             ),
-          ),
+            const SizedBox(height: 16),
+            BlocConsumer<ValidateCubit, ValidateState>(
+              buildWhen: (prev, current) {
+                return prev.isTrue != current.isTrue;
+              },
+              builder: (context, state) {
+                return !state.isTrue
+                    ? const Text("Error")
+                    : const SizedBox.shrink();
+              },
+              listenWhen: (prev, current) {
+                return current.isTrue;
+              },
+              listener: (context, state) async {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('Awesome Snackbar!'),
+                    action: SnackBarAction(
+                      label: 'Well done',
+                      onPressed: () {},
+                    ),
+                  ),
+                );
+              },
+
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
+          context.read<ValidateCubit>().check(_controller?.text);
         },
         child: const Icon(Icons.check),
       ),
